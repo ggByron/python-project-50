@@ -1,3 +1,6 @@
+gendiff:
+	poetry run gendiff
+	
 install:
 	poetry install
 
@@ -15,7 +18,13 @@ selfcheck:
 
 check: selfcheck test lint
 
-build: check
+build:
 	poetry build
+
+publish:
+	poetry publish --dry-run
+
+package-install:
+	pip install --user --force-reinstall dist/*.whl
 
 .PHONY: install test lint selfcheck check build
