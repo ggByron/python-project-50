@@ -1,30 +1,25 @@
 gendiff:
-	poetry run gendiff
+		poetry run gendiff -h
 	
 install:
-	poetry install
+		poetry install
 
-test:
-	poetry run pytest
+pytest:
+		poetry run pytest
 
 test-coverage:
-	poetry run pytest --cov=hexlet_python_package --cov-report xml
+		poetry run pytest --cov=gendiff --cov-report xml
 
 lint:
-	poetry run flake8 hexlet_python_package
+		poetry run flake8 gendiff
 
-selfcheck:
-	poetry check
-
-check: selfcheck test lint
+check: selfcheck pytest lint
 
 build:
-	poetry build
+		poetry build
 
 publish:
-	poetry publish --dry-run
+		poetry publish --dry-run
 
 package-install:
-	pip install --user --force-reinstall dist/*.whl
-
-.PHONY: install test lint selfcheck check build
+		pip install --user --force-reinstall dist/*.whl
