@@ -1,10 +1,7 @@
-gendiff:
-		poetry run gendiff -h
-	
 install:
 		poetry install
 
-pytest:
+test:
 		poetry run pytest
 
 test-coverage:
@@ -13,7 +10,12 @@ test-coverage:
 lint:
 		poetry run flake8 gendiff
 
-check: selfcheck pytest lint
+selfcheck:
+	poetry check
+
+check: selfcheck test lint
+
+.PHONY: install test lint selfcheck check build
 
 build:
 		poetry build
@@ -23,3 +25,6 @@ publish:
 
 package-install:
 		pip install --user --force-reinstall dist/*.whl
+
+gendiff:
+		poetry run gendiff -h
