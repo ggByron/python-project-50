@@ -18,4 +18,3 @@ def generate_diff(file_path1, file_path2):
             result += f'- {key}: {data1[key]}{new_line}'
             result += f'+ {key}: {data2[key]}{new_line}'
     return result[:-1]
-    
