@@ -1,9 +1,9 @@
-import json
+from parser import parse
 
 
 def generate_diff(file_path1, file_path2):
-    data1 = json.load(open(file_path1, 'r'))
-    data2 = json.load(open(file_path2, 'r'))
+    data1 = parse(file_path1)
+    data2 = parse(file_path2)
     keys = data1.keys() | data2.keys()
     result = ''
     new_line = '\n'
