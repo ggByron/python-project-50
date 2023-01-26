@@ -1,11 +1,13 @@
 import json
 import yaml
+import os
 
 
 def parse(file_path):
-    if file_path1[-4].lower() == 'json':
-        data = json.load(open(file_path, 'r'))
-        return data
-    elif file_path1[-3].lower() == 'yml' or file_path1[-4].lower() == 'yaml':
-        data = yaml.load(open(file_path, 'r'))
-        return data
+    file_format = os.path.splitext(file_path)[1]
+    with open(file_path, 'r') as file:
+        if file_format == '.json':
+            dictionary = json.load(file)
+        if file_format in ('.yaml', '.yml'):
+            dictionary = yaml.load(file, Loader=yaml.FullLoader)
+    return dictionary
