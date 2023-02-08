@@ -1,20 +1,59 @@
 from gendiff.parser import parse
+from gendiff.format.stylish import stylish
 
 
-def generate_diff(file_path1, file_path2):
-    data1 = parse(file_path1)
-    data2 = parse(file_path2)
-    keys = data1.keys() | data2.keys()
-    result = ''
-    new_line = '\n'
+FORMAT = {'stylish': stylish}
+
+
+def build_diff(dict1, dict2):
+    keys = dict1.keys() | dict2.keys()
+    result = []
     for key in sorted(keys):
-        if key not in data2:
-            result += f'- {key}: {data1[key]}{new_line}'
-        elif key not in data1:
-            result += f'+ {key}: {data2[key]}{new_line}'
-        elif data1[key] == data2[key]:
-            result += f'{key}: {data2[key]}{new_line}'
-        elif data1[key] != data2[key]:
-            result += f'- {key}: {data1[key]}{new_line}'
-            result += f'+ {key}: {data2[key]}{new_line}'
-    return result[:-1]
+        if key not in dict2:
+            result.append(
+                {
+                    'key': key,
+                    'action': 'deleted',
+                    'val': dict1[key],
+                }
+            )
+        elif key not in dict1:
+            result.append(
+                {
+                    'key': key,
+                    'action': 'added',
+                    'val': dict2[key],
+                }
+            )
+        elif dict1[key] == dict2[key]:
+            result.append(
+                {
+                    'key': key,
+                    'action': 'unchanged',
+                    'val': dict1[key],
+                }
+            )
+        elif isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
+            result.append(
+                {
+                    'key': key,
+                    'action': 'nested',
+                    'children': build_diff(dict1[key], dict2[key]),
+                }
+            )
+        else:
+            result.append(
+                {
+                    'key': key,
+                    'action': 'changed',
+                    'old': dict1[key],
+                    'new': dict2[key],
+                }
+            )
+    return result
+
+
+def generate_diff(file_path1, file_path2, format='stylish'):
+    dict1 = parse(file_path1)
+    dict2 = parse(file_path2)
+    return FORMAT[format](build_diff(dict1, dict2))
