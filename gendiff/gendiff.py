@@ -1,8 +1,10 @@
 from gendiff.parser import parse
 from gendiff.format.stylish import stylish
 from gendiff.format.plain import plain
+from gendiff.format.json import json
 
-FORMAT = {'stylish': stylish, 'plain': plain}
+
+FORMAT = {'stylish': stylish, 'plain': plain, 'json': json}
 
 
 def build_diff(dict1, dict2):

@@ -3,7 +3,7 @@ import json
 import yaml
 from gendiff.gendiff import generate_diff
 from gendiff.parser import parse
-from tests.fixtures.correct_outputs import STYLISH_BASIC, STYLISH_NESTED, PLAIN_NESTED
+from tests.fixtures.correct_outputs import STYLISH_BASIC, STYLISH_NESTED, PLAIN_NESTED, JSON_NESTED
 
 #inputs for testing
 JSON1 = 'tests/fixtures/file1.json'
@@ -41,3 +41,7 @@ def test_stylish_nested():
 def test_plain_nested():
     assert generate_diff(NESTED_JSON1, NESTED_JSON2, 'plain') == PLAIN_NESTED
     assert generate_diff(NESTED_YAML1, NESTED_YAML2, 'plain') == PLAIN_NESTED
+
+def test_json_nested():
+    assert generate_diff(NESTED_JSON1, NESTED_JSON2, 'json') == JSON_NESTED
+    assert generate_diff(NESTED_YAML1, NESTED_YAML2, 'json') == JSON_NESTED
