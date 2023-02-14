@@ -4,3 +4,5 @@ dist/
 .venv/
 .coverage
 coverage.xml
+gendiff/scripts/__pycache__/
+gendiff/format/__pycache__/
