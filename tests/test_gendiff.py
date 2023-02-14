@@ -5,6 +5,7 @@ from gendiff.gendiff import generate_diff
 from gendiff.parser import parse
 from tests.fixtures.correct_outputs import STYLISH_BASIC, STYLISH_NESTED, PLAIN_NESTED, JSON_NESTED
 
+
 #inputs for testing
 JSON1 = 'tests/fixtures/file1.json'
 JSON2 = 'tests/fixtures/file2.json'
@@ -15,33 +16,28 @@ NESTED_JSON2 = 'tests/fixtures/nested_file2.json'
 NESTED_YAML1 = 'tests/fixtures/nested_file1.yml'
 NESTED_YAML2 = 'tests/fixtures/nested_file2.yml'
 
-
-def test_parse_json():
-    with open(JSON1, 'r') as file:
-        parsed_file = json.load(file)
-        assert parse('tests/fixtures/file1.json') == parsed_file
-    
-
-def test_parse_yaml():
-    with open(YAML1, 'r') as file:
-        parsed_file = yaml.load(file, Loader=yaml.FullLoader)
-        assert parse('tests/fixtures/file1.yml') == parsed_file
+CORRECT_BASIC_DICT = {
+    "host": "hexlet.io",
+    "timeout": 50,
+    "proxy": "123.234.53.22",
+    "follow": False,
+}
 
 
-def test_generate_diff():
-    assert generate_diff(JSON1, JSON2) == STYLISH_BASIC
-    assert generate_diff(YAML1, YAML2) == STYLISH_BASIC
+@pytest.mark.parametrize("file_path,expected", [(JSON1, CORRECT_BASIC_DICT), (YAML1, CORRECT_BASIC_DICT)])
+def test_parser(file_path, expected):
+    assert parse(file_path) == expected
 
 
-def test_stylish_nested():
-    assert generate_diff(NESTED_JSON1, NESTED_JSON2, 'stylish') == STYLISH_NESTED
-    assert generate_diff(NESTED_YAML1, NESTED_YAML2, 'stylish') == STYLISH_NESTED
-
-
-def test_plain_nested():
-    assert generate_diff(NESTED_JSON1, NESTED_JSON2, 'plain') == PLAIN_NESTED
-    assert generate_diff(NESTED_YAML1, NESTED_YAML2, 'plain') == PLAIN_NESTED
-
-def test_json_nested():
-    assert generate_diff(NESTED_JSON1, NESTED_JSON2, 'json') == JSON_NESTED
-    assert generate_diff(NESTED_YAML1, NESTED_YAML2, 'json') == JSON_NESTED
+@pytest.mark.parametrize("file_path1,file_path2,format,expected", [
+                        (JSON1, JSON2, 'stylish', STYLISH_BASIC),
+                        (YAML1, YAML2, 'stylish', STYLISH_BASIC),
+                        (NESTED_JSON1, NESTED_JSON2,'stylish', STYLISH_NESTED),
+                        (NESTED_YAML1, NESTED_YAML2,'stylish', STYLISH_NESTED),
+                        (NESTED_JSON1, NESTED_JSON2,'plain', PLAIN_NESTED),
+                        (NESTED_YAML1, NESTED_YAML2,'plain', PLAIN_NESTED),
+                        (NESTED_JSON1, NESTED_JSON2,'json', JSON_NESTED),
+                        (NESTED_YAML1, NESTED_YAML2,'json', JSON_NESTED)
+                        ])
+def test_gendiff(file_path1, file_path2, format, expected):
+    assert generate_diff(file_path1, file_path2, format) == expected
