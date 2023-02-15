@@ -1,10 +1,8 @@
-from gendiff.parser import parse
-from gendiff.format.stylish import stylish
-from gendiff.format.plain import plain
-from gendiff.format.json import json
+from gendiff.parser import parse, get_format
+from gendiff.formatters.formgen import generate_formatters
 
 
-FORMAT = {'stylish': stylish, 'plain': plain, 'json': json}
+FORMAT = generate_formatters()
 
 
 def build_diff(dict1, dict2):
@@ -56,6 +54,8 @@ def build_diff(dict1, dict2):
 
 
 def generate_diff(file_path1, file_path2, format='stylish'):
-    dict1 = parse(file_path1)
-    dict2 = parse(file_path2)
+    file_format1 = get_format(file_path1)
+    file_format2 = get_format(file_path2)
+    dict1 = parse(file_path1, file_format1)
+    dict2 = parse(file_path2, file_format2)
     return FORMAT[format](build_diff(dict1, dict2))

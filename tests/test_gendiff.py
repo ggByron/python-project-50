@@ -24,9 +24,9 @@ CORRECT_BASIC_DICT = {
 }
 
 
-@pytest.mark.parametrize("file_path,expected", [(JSON1, CORRECT_BASIC_DICT), (YAML1, CORRECT_BASIC_DICT)])
-def test_parser(file_path, expected):
-    assert parse(file_path) == expected
+@pytest.mark.parametrize("file_path,format,expected", [(JSON1, '.json', CORRECT_BASIC_DICT), (YAML1,'.yaml' or '.yml', CORRECT_BASIC_DICT)])
+def test_parser(file_path, format, expected):
+    assert parse(file_path, format) == expected
 
 
 @pytest.mark.parametrize("file_path1,file_path2,format,expected", [
