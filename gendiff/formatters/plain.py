@@ -1,14 +1,11 @@
+from formatters.stylish import convert_to_str
+
+
 def convert(item):
-    result = ''
     if isinstance(item, dict):
-        result = "[complex value]"
-    elif item is None:
-        result = 'null'
-    elif isinstance(item, bool):
-        result = f"{str(item).lower()}"
+        return "[complex value]"
     else:
-        result = f"'{str(item)}'"
-    return result
+        return convert_to_str(item)
 
 
 def build_plain(data, key=''):

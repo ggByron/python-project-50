@@ -1,4 +1,13 @@
 INDENT = 4
+ACTION = {'added': ' + ', 'deleted': ' - ', 'unchanged': '   '}
+
+
+def convert_to_str(data):
+    if data is None:
+        return 'null'
+    elif isinstance(data, bool):
+        return f"{str(data).lower()}"
+    return str(data)
 
 
 def stringify(data, replacer=' ', depth=1):
@@ -7,7 +16,7 @@ def stringify(data, replacer=' ', depth=1):
     def walk(data, replacer, depth):
         result = ''
         if not isinstance(data, dict):
-            return str(data)
+            return convert_to_str(data)
         for key, val in data.items():
             if isinstance(val, dict):
                 val = walk(val, replacer, depth + step)
@@ -18,38 +27,35 @@ def stringify(data, replacer=' ', depth=1):
     return walk(data, replacer, depth)
 
 
+def build_key_str(depth, action, key):
+    indent = (depth + INDENT - len(action)) * ' '
+    return f"{indent}{action}{key}: "
+
+
 def build_stylish(data, depth=0):
     result = []
     for item in data:
         if item['action'] == 'nested':
             result.append(
-                f"    {item['key']}: {'{'}\n"
-                f"{build_stylish(item['children'], INDENT)}\n"
-                f"    {'}'}"
+                f"{build_key_str(depth, ACTION['unchanged'], item['key'])}"
+                f"{'{'}\n"
+                f"{build_stylish(item['children'], depth + INDENT)}\n"
+                f"{(depth + INDENT) * ' ' + '}'}"
             )
-        elif item['action'] == 'deleted':
+        elif item['action'] in ACTION:
+            action = item['action']
             result.append(
-                f"  - {item['key']}: "
-                f"{stringify(item['val'], ' ', INDENT)}"
-            )
-        elif item['action'] == 'added':
-            result.append(
-                f"  + {item['key']}: "
-                f"{stringify(item['val'], ' ', INDENT)}"
-            )
-        elif item['action'] == 'unchanged':
-            result.append(
-                f"    {item['key']}: "
-                f"{stringify(item['val'], ' ', INDENT)}"
+                f"{build_key_str(depth, ACTION[action], item['key'])}"
+                f"{stringify(item['val'], ' ', depth + INDENT)}"
             )
         elif item['action'] == 'changed':
             result.append(
-                f"  - {item['key']}: "
-                f"{stringify(item['old'], ' ', INDENT)}"
+                f"{build_key_str(depth, ACTION['deleted'], item['key'])}"
+                f"{stringify(item['old'], ' ', depth + INDENT)}"
             )
             result.append(
-                f"  + {item['key']}: "
-                f"{stringify(item['new'], ' ', INDENT)}"
+                f"{build_key_str(depth, ACTION['added'], item['key'])}"
+                f"{stringify(item['new'], ' ', depth + INDENT)}"
             )
 
     return '\n'.join(result)
