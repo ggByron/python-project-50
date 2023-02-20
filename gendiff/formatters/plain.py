@@ -1,4 +1,4 @@
-from formatters.stylish import convert_to_str
+from gendiff.formatters.stylish import convert_to_str
 
 
 def convert(item):
