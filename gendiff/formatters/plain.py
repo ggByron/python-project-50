@@ -1,11 +1,14 @@
 from gendiff.formatters.stylish import convert_to_str
 
 
-def convert(item):
-    if isinstance(item, dict):
-        return "[complex value]"
-    else:
-        return convert_to_str(item)
+def convert(data):
+    if data is None:
+        return 'null'
+    elif isinstance(data, bool):
+        return f"{str(data).lower()}"
+    elif isinstance(data, dict):
+        return '[complex value]'
+    return f"'{str(data)}'"
 
 
 def build_plain(data, key=''):
