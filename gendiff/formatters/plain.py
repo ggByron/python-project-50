@@ -1,6 +1,3 @@
-from gendiff.formatters.stylish import convert_to_str
-
-
 def convert(data):
     if data is None:
         return 'null'

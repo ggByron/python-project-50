@@ -20,7 +20,7 @@ def stringify(data, replacer=' ', depth=1):
         for key, val in data.items():
             if isinstance(val, dict):
                 val = walk(val, replacer, depth + step)
-            result += f"{replacer * (depth + step)}{key}: {val}\n"
+            result += f"{INDENT * ' '}{replacer * depth}{key}: {val}\n"
         result = '{' + '\n' + result
         result += replacer * depth + '}'
         return result
