@@ -20,11 +20,14 @@ check: selfcheck test lint
 build:
 	poetry build
 
+package-install:
+	pip install --user --force-reinstall dist/*.whl
+
+package-reinstall:
+	pip install --user --force-reinstall dist/*.whl
+
 publish:
 	poetry publish --dry-run
-
-package-install:
-	python3 -m pip install --user dist/*.whl
 
 gendiff:
 	poetry run gendiff -h
