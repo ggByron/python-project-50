@@ -1,7 +1,7 @@
 import pytest
 import json
 import yaml
-from gendiff.gendiff import generate_diff
+from gendiff.generate import generate_diff
 from gendiff.parser import parse
 from tests.fixtures.correct_outputs import STYLISH_BASIC, STYLISH_NESTED, PLAIN_NESTED, JSON_NESTED
 
