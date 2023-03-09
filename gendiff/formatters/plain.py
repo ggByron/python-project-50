@@ -1,8 +1,9 @@
+from gendiff.formatters.stylish import convert_to_str
+
+
 def convert(data):
-    if data is None:
-        return 'null'
-    elif isinstance(data, bool):
-        return f"{str(data).lower()}"
+    if data is None or isinstance(data, bool):
+        return convert_to_str(data)
     elif isinstance(data, dict):
         return '[complex value]'
     elif isinstance(data, int):
