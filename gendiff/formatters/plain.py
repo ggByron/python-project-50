@@ -5,6 +5,8 @@ def convert(data):
         return f"{str(data).lower()}"
     elif isinstance(data, dict):
         return '[complex value]'
+    elif isinstance(data, int):
+        return str(data)
     return f"'{str(data)}'"
 
 
