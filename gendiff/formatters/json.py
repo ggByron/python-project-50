@@ -1,4 +1,4 @@
-def json(data):
+def build_json(data):
 
     def walk(data):
         result = ''
@@ -11,3 +11,17 @@ def json(data):
         result = '[' + result + ']'
         return result
     return walk(data)
+
+
+def quote_normalizer(data):
+    result = ''
+    for _ in data:
+        if _ != "'":
+            result += _
+        else:
+            result += '"'
+    return result
+
+
+def json(data):
+    return quote_normalizer(build_json(data))
