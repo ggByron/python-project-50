@@ -7,7 +7,8 @@ STYLISH_BASIC = '''{
   + verbose: true
 }'''
 
-STYLISH_NESTED = '''{
+STYLISH_NESTED = '''\
+{
     common: {
       + follow: false
         setting1: Value 1
@@ -20,7 +21,7 @@ STYLISH_NESTED = '''{
         }
         setting6: {
             doge: {
-              - wow:
+              - wow: 
               + wow: so much
             }
             key: value
@@ -64,7 +65,7 @@ Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]'''
 
-JSON_NESTED = '[{"key": "common", "action": "nested", "children": \
+JSON_NESTED = '''[{"key": "common", "action": "nested", "children": \
 [{"key": "follow", "action": "added", "val": false}, \
 {"key": "setting1", "action": "unchanged", "val": "Value 1"}, \
 {"key": "setting2", "action": "deleted", "val": 200}, \
@@ -81,4 +82,5 @@ JSON_NESTED = '[{"key": "common", "action": "nested", "children": \
 {"key": "foo", "action": "unchanged", "val": "bar"}, \
 {"key": "nest", "action": "changed", "old": {"key": "value"}, "new": "str"}]}, \
 {"key": "group2", "action": "deleted", "val": {"abc": 12345, "deep": {"id": 45}}}, \
-{"key": "group3", "action": "added", "val": {"deep": {"id": {"number": 45}}, "fee": 100500}}]'
+{"key": "group3", "action": "added", "val": \
+{"deep": {"id": {"number": 45}}, "fee": 100500}}]'''
