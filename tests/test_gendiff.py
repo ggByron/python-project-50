@@ -1,19 +1,10 @@
 import pytest
+import json
 from gendiff.generate import generate_diff
 from gendiff.parser import parse
-from tests.fixtures.correct_outputs import STYLISH_BASIC, STYLISH_NESTED, PLAIN_NESTED, JSON_NESTED
 
 
-# inputs for testing
-JSON1 = 'tests/fixtures/file1.json'
-JSON2 = 'tests/fixtures/file2.json'
-YAML1 = 'tests/fixtures/file1.yml'
-YAML2 = 'tests/fixtures/file2.yml'
-NESTED_JSON1 = 'tests/fixtures/nested_file1.json'
-NESTED_JSON2 = 'tests/fixtures/nested_file2.json'
-NESTED_YAML1 = 'tests/fixtures/nested_file1.yml'
-NESTED_YAML2 = 'tests/fixtures/nested_file2.yml'
-
+PATH = 'tests/fixtures/'
 CORRECT_BASIC_DICT = {
     "host": "hexlet.io",
     "timeout": 50,
@@ -22,10 +13,15 @@ CORRECT_BASIC_DICT = {
 }
 
 
+def read_file(filepath):
+    with open(filepath, 'r') as file:
+        return file.read()
+
+
 @pytest.mark.parametrize(
     "file_path, format, expected", [
-        (JSON1, '.json', CORRECT_BASIC_DICT),
-        (YAML1, '.yaml' or '.yml', CORRECT_BASIC_DICT)
+        (f'{PATH}file1.json', '.json', json.loads(read_file(f'{PATH}file1_content.json'))),
+        (f'{PATH}file1.yml', '.yaml' or '.yml', json.loads(read_file(f'{PATH}file1_content.json')))
     ]
 )
 def test_parse(file_path, format, expected):
@@ -33,15 +29,15 @@ def test_parse(file_path, format, expected):
 
 
 @pytest.mark.parametrize(
-    "file_path1, file_path2, format,expected", [
-        (JSON1, JSON2, 'stylish', STYLISH_BASIC),
-        (YAML1, YAML2, 'stylish', STYLISH_BASIC),
-        (NESTED_JSON1, NESTED_JSON2, 'stylish', STYLISH_NESTED),
-        (NESTED_YAML1, NESTED_YAML2, 'stylish', STYLISH_NESTED),
-        (NESTED_JSON1, NESTED_JSON2, 'plain', PLAIN_NESTED),
-        (NESTED_YAML1, NESTED_YAML2, 'plain', PLAIN_NESTED),
-        (NESTED_JSON1, NESTED_JSON2, 'json', JSON_NESTED),
-        (NESTED_YAML1, NESTED_YAML2, 'json', JSON_NESTED)
+    "file_path1, file_path2, format, expected", [
+        (f'{PATH}file1.json', f'{PATH}file2.json', 'stylish', read_file(f'{PATH}correct_stylish_basic.txt')),
+        (f'{PATH}file1.yml', f'{PATH}file2.yml', 'stylish', read_file(f'{PATH}correct_stylish_basic.txt')),
+        (f'{PATH}nested_file1.json', f'{PATH}nested_file2.json', 'stylish', read_file(f'{PATH}correct_stylish_nested.txt')),
+        (f'{PATH}nested_file1.yml', f'{PATH}nested_file2.yml', 'stylish', read_file(f'{PATH}correct_stylish_nested.txt')),
+        (f'{PATH}nested_file1.json', f'{PATH}nested_file2.json', 'plain', read_file(f'{PATH}correct_plain.txt')),
+        (f'{PATH}nested_file1.yml', f'{PATH}nested_file2.yml', 'plain', read_file(f'{PATH}correct_plain.txt')),
+        (f'{PATH}nested_file1.json', f'{PATH}nested_file2.json', 'json', read_file(f'{PATH}correct_json.txt')),
+        (f'{PATH}nested_file1.yml', f'{PATH}nested_file2.yml', 'json', read_file(f'{PATH}correct_json.txt'))
     ]
 )
 def test_generate_diff(file_path1, file_path2, format, expected):
