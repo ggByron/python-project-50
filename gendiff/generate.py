@@ -1,4 +1,4 @@
-from gendiff.parser import parse, read, get_format
+from gendiff.parser import parse, read
 from gendiff.formatters.stylish import stylish
 from gendiff.formatters.plain import plain
 from gendiff.formatters.json import json
