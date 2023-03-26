@@ -5,27 +5,21 @@ from gendiff.parser import parse
 
 
 PATH = 'tests/fixtures/'
-CORRECT_BASIC_DICT = {
-    "host": "hexlet.io",
-    "timeout": 50,
-    "proxy": "123.234.53.22",
-    "follow": False,
-}
 
 
-def read_file(filepath):
-    with open(filepath, 'r') as file:
+def read_file(file_path):
+    with open(file_path, 'r') as file:
         return file.read()
 
 
 @pytest.mark.parametrize(
-    "file_path, format, expected", [
-        (f'{PATH}file1.json', '.json', json.loads(read_file(f'{PATH}file1_content.json'))),
-        (f'{PATH}file1.yml', '.yaml' or '.yml', json.loads(read_file(f'{PATH}file1_content.json')))
+    "content, file_format, expected", [
+        (read_file(f'{PATH}file1.json'), '.json', json.loads(read_file(f'{PATH}file1_content.json'))),
+        (read_file(f'{PATH}file1.yml'), '.yml', json.loads(read_file(f'{PATH}file1_content.json')))
     ]
 )
-def test_parse(file_path, format, expected):
-    assert parse(file_path, format) == expected
+def test_parse(content, file_format, expected):
+    assert parse(content, file_format) == expected
 
 
 @pytest.mark.parametrize(

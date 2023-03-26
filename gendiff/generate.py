@@ -1,4 +1,4 @@
-from gendiff.parser import parse, get_format
+from gendiff.parser import parse, read, get_format
 from gendiff.formatters.stylish import stylish
 from gendiff.formatters.plain import plain
 from gendiff.formatters.json import json
@@ -56,8 +56,8 @@ def build_diff(dict1, dict2):
 
 
 def generate_diff(file_path1, file_path2, format='stylish'):
-    file_format1 = get_format(file_path1)
-    file_format2 = get_format(file_path2)
-    dict1 = parse(file_path1, file_format1)
-    dict2 = parse(file_path2, file_format2)
+    file_content1, file_format1 = read(file_path1)
+    file_content2, file_format2 = read(file_path2)
+    dict1 = parse(file_content1, file_format1)
+    dict2 = parse(file_content2, file_format2)
     return FORMATS[format](build_diff(dict1, dict2))
