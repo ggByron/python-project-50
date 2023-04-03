@@ -14,9 +14,9 @@ def read(file_path):
     return content, file_format
 
 
-def parse(content, file_format):
-    if file_format == '.json':
+def parse(content, data_format):
+    if data_format == '.json':
         dictionary = json.loads(content)
-    if file_format in ('.yaml', '.yml'):
+    if data_format in ('.yaml', '.yml'):
         dictionary = yaml.load(content, Loader=yaml.FullLoader)
     return dictionary
